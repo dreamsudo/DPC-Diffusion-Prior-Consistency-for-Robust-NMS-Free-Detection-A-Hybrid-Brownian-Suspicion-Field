@@ -1,0 +1,2 @@
+# DPC-Diffusion-Prior-Consistency-for-Robust-NMS-Free-Detection-A-Hybrid-Brownian-Suspicion-Field
+DPC Defense: A defense designed for NMS-free end-to-end detectors. The framework constructs a spatial suspicion field by probing the input at K= 8 fixed timesteps under a variance-preserving forward stochastic differential equation, computing the per-pixel residual between the denoiser’s noise prediction and the injected noise, and aggregat
