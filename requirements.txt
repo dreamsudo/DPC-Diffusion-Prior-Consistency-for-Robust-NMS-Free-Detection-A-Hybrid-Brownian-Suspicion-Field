@@ -1,0 +1,16 @@
+# DPC-YOLO26 v3.2.0 dependencies.
+#
+# Minimum-version pinning (not exact ==) so pip can resolve a compatible set
+# across torch/numpy/scipy/opencv/matplotlib for darwin-arm64, linux-x86_64,
+# and cuda-equipped hosts.
+torch>=2.4
+torchvision>=0.19
+numpy>=1.26,<2.3
+opencv-python>=4.9
+matplotlib>=3.8
+Pillow>=10.0
+PyYAML>=6.0
+tqdm>=4.66
+scipy>=1.13
+pytest>=8.0
+ultralytics>=8.3

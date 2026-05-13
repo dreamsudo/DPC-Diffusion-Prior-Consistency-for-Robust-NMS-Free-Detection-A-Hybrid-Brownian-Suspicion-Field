@@ -1,0 +1,97 @@
+{
+  "name": "production",
+  "version": "3.3.0",
+  "seed": 42,
+  "device": "auto",
+  "runs_root": "../runs_v33_prod",
+  "cache_root": "../caches",
+  "yolo_weights": "../../yolo26n.pt",
+  "data": {
+    "coco_dir": "../../../datasets/COCO/train2017",
+    "coco_val_dir": null,
+    "apricot_dir": "../../../datasets/APRICOT/APRICOTv1.0",
+    "apricot_split": "test",
+    "apricot_val_fraction": 0.1,
+    "num_workers": 8
+  },
+  "prep": {
+    "probe_resolution": 128,
+    "eval_resolution": 640,
+    "coco_annotations": "../../../datasets/COCO/annotations/instances_train2017.json"
+  },
+  "dpc": {
+    "diffusion_steps": 1000,
+    "beta_start": 0.0001,
+    "beta_end": 0.02,
+    "n_probes": 8,
+    "sigma_min": 0.05,
+    "sigma_max": 0.5,
+    "probe_res": 128,
+    "smoothing_sigma": 1.5,
+    "smoothing_kernel_size": 7,
+    "deployment_mode": "hybrid",
+    "fusion_weight_l1": 0.5,
+    "lambda_obj": 50.0,
+    "lambda_cls": 50.0,
+    "class_calibration_mode": "uniform",
+    "lambda_small": 0.5,
+    "small_target_area_threshold": 0.01,
+    "lambda_match": 10.0,
+    "lambda_entropy": 0.1,
+    "lambda_locstab": 0.1,
+    "lambda_anchor": 1.0,
+    "lambda_loc": 1.0,
+    "lambda_conf": 1.0,
+    "pool_size": 7,
+    "use_attention": true
+  },
+  "train_p1": {
+    "epochs": 30,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "warmup_steps": 500,
+    "save_ckpt_every_steps": 2000,
+    "log_every_steps": 50,
+    "max_steps_per_epoch": -1,
+    "ema_decay": 0.999,
+    "early_stop_patience": 5
+  },
+  "train_p2": {
+    "additional_epochs": 10,
+    "batch_size": 16,
+    "denoiser_lr": 1e-05,
+    "head_lr": 1e-05,
+    "warmup_steps": 200,
+    "steps_per_epoch": 2000,
+    "log_every_steps": 50,
+    "save_ckpt_every_steps": 1000,
+    "ema_decay": 0.999,
+    "early_stop_patience": 3,
+    "p_coco": 0.4,
+    "p_apricot": 0.3,
+    "p_synthetic": 0.3
+  },
+  "eval_p3": {
+    "score_threshold": 0.25,
+    "on_patch_iou": 0.1,
+    "alphas": [
+      10,
+      25,
+      50,
+      75,
+      100
+    ],
+    "n_images": -1
+  },
+  "eval_negative_control": {
+    "n_images": 500
+  },
+  "aggregate": {
+    "n_boot": 10000
+  },
+  "seeds": [
+    42,
+    1337,
+    2024
+  ]
+}

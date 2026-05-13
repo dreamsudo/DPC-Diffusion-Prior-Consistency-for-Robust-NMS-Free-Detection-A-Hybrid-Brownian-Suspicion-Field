@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dpc-yolo26"
+version = "3.3.0"
+description = "Diffusion-prior consistency defense against adversarial patches on YOLO26"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "DPC Engine" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "numpy>=1.26,<2.3",
+    "opencv-python>=4.9",
+    "matplotlib>=3.8",
+    "Pillow>=10.0",
+    "PyYAML>=6.0",
+    "tqdm>=4.66",
+    "scipy>=1.13",
+    "ultralytics>=8.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+dpcctl = "dpcctl.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dpc*", "dpcctl*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
