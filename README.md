@@ -191,7 +191,7 @@ dpcroot/
 
 ## Tested environment
 
-- macOS 14, MacBook Pro M1 Max, 32 GB RAM, Apple MPS backend.
+- macOS 14, MacBook Pro M1 Max, 64 GB RAM, Apple MPS backend.
 - Python 3.12.13, PyTorch 2.11.
 
 Linux + CUDA should work but is not the validated path.
