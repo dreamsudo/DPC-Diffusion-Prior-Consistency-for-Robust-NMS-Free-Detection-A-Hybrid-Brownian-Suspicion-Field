@@ -94,7 +94,7 @@ A run executes eight phases sequentially. The orchestrator handles all sequencin
 
 This guide covers the complete operational lifecycle: installation (§2), repository layout and the role of every file (§3), the command interface (§4), each of the 8 phases in operational detail (§5), every `tools/` script (§6), every configuration knob (§7), the canonical end-to-end walkthrough (§8), tuning procedures (§9), debugging (§10), production deployment (§11), and reproducibility plus reference tables (§12).
 
-Theoretical justification, methodology derivations, and module-level docs are in the companion paper and the full 93-page research manual.
+Theoretical justification, methodology derivations, and module-level docs are in the companion paper and the full research manual.
 
 ---
 
@@ -1860,7 +1860,7 @@ Bit-identical reproduction on the same hardware. Statistically identical on diff
 
 ### 12.11 Where to Go Next
 
-- Full 93-page research manual: module-by-module documentation, methodology derivations, complete glossary, experiment templates.
+- Full research manual: module-by-module documentation, methodology derivations, complete glossary, experiment templates.
 - Companion paper: five theorems, three propositions, four algorithms, adaptive evaluation protocol, threat-model boundary cases.
 - `CHANGELOG.md`: canonical theorem-to-code mapping for v3.3.1.
 - `runs_quick_v33/`: committed reference smoke output for comparison.
