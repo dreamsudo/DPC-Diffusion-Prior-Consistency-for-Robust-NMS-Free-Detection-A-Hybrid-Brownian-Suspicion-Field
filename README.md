@@ -17,7 +17,7 @@
 
 ## About This Guide
 
-This is the operational deployment guide for the DPC-YOLO26 v3.3.1 reference codebase. It documents every file, every tool, every configuration option, every phase, and the complete end-to-end workflow from a fresh machine to a production deployment. The guide is the practical companion to the research manuscript and the full 93-page research manual. It assumes readers are familiar with PyTorch and basic object detection; theoretical derivations are deferred to the paper.
+This is the operational deployment guide for the DPC-YOLO26 v3.3.1 reference codebase. It documents every file, every tool, every configuration option, every phase, and the complete end-to-end workflow from a fresh machine to a production deployment. The guide is the practical companion to the research manuscript and the full research manual. It assumes readers are familiar with PyTorch and basic object detection; theoretical derivations are deferred to the paper.
 
 **Reading order.** Sections 1–3 (overview, install, layout) before first use. Section 4 (commands) and 5 (phases) for the operational pattern. Section 6 (tools) and 7 (configuration) as reference. Section 8 (end-to-end walkthrough) as a check that everything works. Section 9 (tuning) when calibrating for a deployment. Section 10 (debugging) when something fails. Section 11 (deployment) for production operationalization. Section 12 (reproducibility & reference) for audits.
 
