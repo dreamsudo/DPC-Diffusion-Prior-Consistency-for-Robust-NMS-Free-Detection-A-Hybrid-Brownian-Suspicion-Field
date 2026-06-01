@@ -228,6 +228,15 @@ def load_config(path: str) -> OrchestratorConfig:
     p = Path(path).resolve()
     raw = json.loads(p.read_text())
 
+    # Multi-seed resolution. The orchestrator drives runs off cfg.seeds, which
+    # reads from the multi_seed block. Historically a flat top-level "seeds"
+    # array was silently ignored (multi_seed defaulted to disabled, so cfg.seeds
+    # fell back to [seed]). Accept either form: an explicit multi_seed block, or
+    # a flat "seeds" list, which we promote to an enabled multi_seed block.
+    ms_raw = dict(raw.get("multi_seed", {}))
+    if "seeds" in raw and "seeds" not in ms_raw:
+        ms_raw = {"enabled": True, "seeds": list(raw["seeds"])}
+
     cfg = OrchestratorConfig(
         name=raw["name"],
         version=raw.get("version", "3.3.0"),
@@ -246,7 +255,7 @@ def load_config(path: str) -> OrchestratorConfig:
             **raw.get("eval_negative_control", {})
         ),
         viz=VizConfig(**raw.get("viz", {})),
-        multi_seed=MultiSeedConfig(**raw.get("multi_seed", {})),
+        multi_seed=MultiSeedConfig(**ms_raw),
         config_path=p,
     )
     return cfg
