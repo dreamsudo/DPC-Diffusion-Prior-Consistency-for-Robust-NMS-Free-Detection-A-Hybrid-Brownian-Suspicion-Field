@@ -146,7 +146,26 @@ def main(args: argparse.Namespace) -> int:
     with per_image_path.open("w") as fh:
         for batch_idx, batch in enumerate(loader):
             images = batch["images"].to(device)
-            patch_boxes = batch.get("patch_boxes", [torch.empty((0, 4))])[0].to(device)
+
+            # Patch boxes: real APRICOT eval REQUIRES per-image patch boxes from
+            # the collate. A missing key used to be swallowed by a .get() default,
+            # which silently zeroed the on-patch metric. We now fail loudly for
+            # APRICOT, and treat negative-control (clean COCO) as legitimately
+            # patch-free.
+            if args.negative_control:
+                patch_boxes = batch.get(
+                    "patch_boxes", [torch.empty((0, 4))]
+                )[0].to(device)
+            else:
+                if "patch_boxes" not in batch:
+                    raise KeyError(
+                        "evaluate_phase3: batch is missing 'patch_boxes'. The "
+                        "APRICOT collate (dpc.data.collate_dpc_batch) must "
+                        "propagate per-image patch boxes. Refusing to emit a "
+                        "vacuous on-patch metric."
+                    )
+                patch_boxes = batch["patch_boxes"][0].to(device)
+
             name = batch.get("names", [f"image_{batch_idx}"])[0]
             H, W = images.shape[2], images.shape[3]
 
@@ -201,6 +220,22 @@ def main(args: argparse.Namespace) -> int:
         str(out_dir),
         extra_meta={"phase": "phase3", "args": vars(args), "cfg": cfg.asdict()},
     )
+
+    # Rigor guard: for real APRICOT eval, an empty on-patch denominator means
+    # the metric measured nothing (no baseline detection ever overlapped a patch
+    # box). That is almost always a wiring or coordinate-frame problem, not a
+    # real result. Fail rather than let a vacuous aggregate.json be recorded and
+    # mistaken for a finding. Negative-control runs are patch-free by design and
+    # are exempt.
+    if not args.negative_control and on_patch_agg.get("n_applicable_images", 0) == 0:
+        raise RuntimeError(
+            "evaluate_phase3: on-patch metric is vacuous "
+            "(n_applicable_images=0): no baseline detection overlapped any patch "
+            "box across all images. Check that the eval-cache patch boxes exist "
+            "and are scaled to the eval resolution. Refusing to record a "
+            "non-result as if it were a finding."
+        )
+
     return 0
 
 
