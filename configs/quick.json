@@ -75,11 +75,11 @@
     "score_threshold": 0.25,
     "on_patch_iou": 0.1,
     "alphas": [
-      10,
-      25,
-      50,
-      75,
-      100
+      0,
+      0.5,
+      1,
+      2,
+      5
     ],
     "n_images": 50
   },
