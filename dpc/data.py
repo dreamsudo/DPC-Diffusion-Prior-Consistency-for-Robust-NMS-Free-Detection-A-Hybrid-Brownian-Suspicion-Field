@@ -297,6 +297,11 @@ def collate_dpc_batch(batch: list[dict]) -> dict:
       mask_validity: [B] bool — True if that item has a real mask
       sources:       list[str]
       paths:         list[str]
+      patch_boxes:   list[[M_b, 4]] — per-image APRICOT patch boxes, present
+                     only when at least one item carries "bboxes". Items
+                     without patch annotations get a [0, 4] tensor. The Phase 3
+                     evaluator reads this to classify detections as on/off-patch.
+      names:         list[str] — per-image identifier (basename of path).
     """
     images = torch.stack([b["image"] for b in batch], dim=0)
     sources = [b.get("source", "unknown") for b in batch]
@@ -353,6 +358,26 @@ def collate_dpc_batch(batch: list[dict]) -> dict:
         out["mix_source_idx"] = torch.tensor(
             [b.get("mix_source_idx", -1) for b in batch], dtype=torch.long
         )
+
+    # Per-image APRICOT patch boxes. CachedApricotDataset returns these under
+    # the "bboxes" key; the Phase 3 evaluator looks for "patch_boxes". Without
+    # this propagation the evaluator's batch.get("patch_boxes", default) always
+    # hit the empty default, so every detection was classified off-patch and
+    # the on-patch suppression metric was silently vacuous (n_applicable=0).
+    if any(("bboxes" in b) for b in batch):
+        patch_boxes_list: list = []
+        for b in batch:
+            bb = b.get("bboxes", [])
+            if len(bb) > 0:
+                patch_boxes_list.append(torch.as_tensor(bb, dtype=torch.float32))
+            else:
+                patch_boxes_list.append(torch.zeros((0, 4), dtype=torch.float32))
+        out["patch_boxes"] = patch_boxes_list
+
+    # Per-image identifier for per_image records (basename of the path).
+    out["names"] = [p.rsplit("/", 1)[-1] if p else f"image_{i}"
+                    for i, p in enumerate(paths)]
+
     return out
 
 
