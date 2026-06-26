@@ -51,9 +51,7 @@ The framework wraps the YOLO26 detector with a **diffusion-based suspicion engin
 - **Objectness logits** (Eq. 16 of the paper) — suppression in suspect regions.
 - **Class logits** (Eq. 17) — uniform shift across classes.
 - **Small-target amplification** (Eq. 21) — compensates for YOLO26's small-target label assignment.
-- **Hungarian assignment cost matrix** (Eq. 22) — the framework's central novel intervention. No image-space defense can reach this point.
-
-The defense adds approximately **2× latency** over the baseline detector (Theorem 4 of the paper) and preserves clean-input accuracy within **1% mAP** (Theorem 5).
+- **Hungarian assignment cost matrix** (Eq. 22)
 
 ### 1.3 Three Configurations
 
